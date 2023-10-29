@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Comments System</title>
+		<link href="style.css" rel="stylesheet" type="text/css">
+		<link href="comments.css" rel="stylesheet" type="text/css">
+	</head>
+	<body>
+
+	    <nav class="navtop">
+	    	<div>
+	    		<h1>SOLUTION SECTOR</h1>
+	    	</div>
+	    </nav>
+
+		<div class="content home">
+
+			<h2>query 1</h2>
+
+			<p><h3>username:<h2>john</h2></h3></p>
+
+			<p>query:Im done with 10th and interested in math and science </p>
+
+			<p>solution:The first and foremost thing you should do before starting your class 11 is to revise everything you studied in Science and Maths from class 6 to class 10. Dont leave any part untouched and build up your concepts on the topics thoroughly. Now, you are almost ready to face the upcomming challenges.
+
+                Now, you said that you love Maths and Physics. Your choice is pretty good as Maths and Physics complement each-other. Assuming you are not inclined towards biology, I would suggest you to take Physics, Chemistry and Maths (MPC) </p>
+			
+		</div>
+        <div class="comments"></div>
+
+        <script>
+        const comments_page_id = 1; // This number should be unique on every page
+        fetch("comments.php?page_id=" + comments_page_id).then(response => response.text()).then(data => {
+            document.querySelector(".comments").innerHTML = data;
+            document.querySelectorAll(".comments .write_comment_btn, .comments .reply_comment_btn").forEach(element => {
+                element.onclick = event => {
+                    event.preventDefault();
+                    document.querySelectorAll(".comments .write_comment").forEach(element => element.style.display = 'none');
+                    document.querySelector("div[data-comment-id='" + element.getAttribute("data-comment-id") + "']").style.display = 'block';
+                    document.querySelector("div[data-comment-id='" + element.getAttribute("data-comment-id") + "'] input[name='name']").focus();
+                };
+            });
+            document.querySelectorAll(".comments .write_comment form").forEach(element => {
+                element.onsubmit = event => {
+                    event.preventDefault();
+                    fetch("comments.php?page_id=" + comments_page_id, {
+                        method: 'POST',
+                        body: new FormData(element)
+                    }).then(response => response.text()).then(data => {
+                        element.parentElement.innerHTML = data;
+                    });
+                };
+            });
+        });
+        </script>
+	</body>
+</html>

@@ -1,0 +1,57 @@
+<html>
+<h1>WELCOME TO SOLUTION SECTOR</h1>
+<ul>
+<li><h3>username=<H2>anusha</H2> query:I HAVE COMPLETED MY 10TH
+<h2>the best we suggest is if ur interested in math and physics just go for mpc</h2>
+<a href="http://localhost/trail/"><button type="button">your reply</button></a>
+
+</li>
+</ul>
+
+</html>
+<script>
+$(document).ready(function(){
+ 
+ $('#comment_form').on('submit', function(event){
+  event.preventDefault();
+  var form_data = $(this).serialize();
+  $.ajax({
+   url:"add_comment.php",
+   method:"POST",
+   data:form_data,
+   dataType:"JSON",
+   success:function(data)
+   {
+    if(data.error != '')
+    {
+     $('#comment_form')[0].reset();
+     $('#comment_message').html(data.error);
+     $('#comment_id').val('0');
+     load_comment();
+    }
+   }
+  })
+ });
+
+ load_comment();
+
+ function load_comment()
+ {
+  $.ajax({
+   url:"fetch_comment.php",
+   method:"POST",
+   success:function(data)
+   {
+    $('#display_comment').html(data);
+   }
+  })
+ }
+
+ $(document).on('click', '.reply', function(){
+  var comment_id = $(this).attr("id");
+  $('#comment_id').val(comment_id);
+  $('#comment_name').focus();
+ });
+ 
+});
+</script>
